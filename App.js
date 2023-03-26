@@ -3,6 +3,7 @@ import React from "react";
 import "react-native-gesture-handler";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
+import { Button, Text} from "react-native";
 import MovieListScreen from "./screens/MovieListScreen/MovieListScreen.main";
 import MovieDetailScreen from "./screens/MovieDetailScreen/MovieDetailScreen.main";
 import MovieFilterScreen from "./screens/MovieFilterScreen/MovieFilterScreen.main";
@@ -22,5 +23,46 @@ import MovieFilterScreen from "./screens/MovieFilterScreen/MovieFilterScreen.mai
 
   https://reactnavigation.org/docs/modal */
 export default function App() {
-  return <NavigationContainer>{}</NavigationContainer>;
+
+  const RootStack = createStackNavigator();
+
+  return (
+    <NavigationContainer>
+      {<RootStack.Navigator>
+        <RootStack.Group>
+          <RootStack.Screen name="List" 
+          component={MovieListScreen}
+          options={{
+            headerTitle: <Text>Filter</Text>,
+            headerRight: () => (
+              <Button
+                title='Filter'
+              />
+            ),
+          }}
+          />
+          <RootStack.Screen name="Details" component={MovieDetailScreen} />
+        </RootStack.Group>
+        <RootStack.Group screenOptions={{ presentation: 'modal' }}>
+          <RootStack.Screen name="Filter" 
+          component={MovieFilterScreen}
+          options={({ navigation, route }) => ({
+            headerTitle: <Text>Done</Text>,
+            // Add a placeholder button without the `onPress` to avoid flicker
+            headerLeft: () => (
+              <Text></Text>
+            ),
+            headerRight: () => (
+              <Button title="Done"/>
+            ),
+            
+          })}
+          
+          />
+        </RootStack.Group>
+      </RootStack.Navigator>}
+    </NavigationContainer>
+    )
 }
+
+
